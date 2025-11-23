@@ -1,4 +1,8 @@
-package src.main.java.org.example;
+package src.test.java;
+
+import src.main.java.org.example.File;
+import src.main.java.org.example.FileSystemItem;
+import src.main.java.org.example.Folder;
 
 public class PathTest {
     public static void main(String[] args) {

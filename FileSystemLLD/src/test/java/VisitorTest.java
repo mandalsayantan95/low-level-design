@@ -1,4 +1,9 @@
-package src.main.java.org.example;
+package src.test.java;
+
+import src.main.java.org.example.File;
+import src.main.java.org.example.Folder;
+import src.main.java.org.example.PrintVisitor;
+import src.main.java.org.example.SizeCalculatorVisitor;
 
 public class VisitorTest {
     public static void main(String[] args) {

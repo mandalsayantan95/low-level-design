@@ -1,4 +1,7 @@
-package src.main.java.org.example;
+package src.test.java;
+
+import src.main.java.org.example.File;
+import src.main.java.org.example.Folder;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

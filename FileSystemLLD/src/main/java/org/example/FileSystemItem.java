@@ -22,4 +22,6 @@ public interface FileSystemItem {
         }
         targetFolder.addItem(this);
     }
+
+    void accept(FileSystemVisitor visitor);
 }

@@ -123,4 +123,18 @@ public class Folder implements FileSystemItem {
         }
         return null; // Not found
     }
+
+    @Override
+    public void accept(FileSystemVisitor visitor) {
+        visitor.visit(this);
+    }
+
+    public List<FileSystemItem> getChildren() {
+        lock.readLock().lock();
+        try {
+            return new ArrayList<>(children);
+        } finally {
+            lock.readLock().unlock();
+        }
+    }
 }

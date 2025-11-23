@@ -44,4 +44,9 @@ public class File implements FileSystemItem {
     public String getPath() {
         return (parent != null ? parent.getPath() : "") + "/" + name;
     }
+
+    @Override
+    public void accept(FileSystemVisitor visitor) {
+        visitor.visit(this);
+    }
 }

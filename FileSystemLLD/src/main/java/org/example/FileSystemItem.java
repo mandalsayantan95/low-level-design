@@ -15,4 +15,11 @@ public interface FileSystemItem {
     String getName();
 
     String getPath();
+
+    default void move(Folder targetFolder) {
+        if (getParent() != null) {
+            getParent().removeItem(this);
+        }
+        targetFolder.addItem(this);
+    }
 }

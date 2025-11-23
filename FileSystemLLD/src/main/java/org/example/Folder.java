@@ -22,6 +22,15 @@ public class Folder implements FileSystemItem {
         }
     }
 
+    public void removeItem(FileSystemItem item) {
+        lock.writeLock().lock();
+        try {
+            children.remove(item);
+        } finally {
+            lock.writeLock().unlock();
+        }
+    }
+
     @Override
     public int getSize() {
         lock.readLock().lock();

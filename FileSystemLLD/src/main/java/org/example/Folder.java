@@ -6,6 +6,7 @@ public class Folder implements FileSystemItem {
     private final String name;
     private final List<FileSystemItem> children = new ArrayList<>();
     private final java.util.concurrent.locks.ReadWriteLock lock = new java.util.concurrent.locks.ReentrantReadWriteLock();
+    private Folder parent;
 
     public Folder(String name) {
         this.name = name;
@@ -14,6 +15,7 @@ public class Folder implements FileSystemItem {
     public void addItem(FileSystemItem item) {
         lock.writeLock().lock();
         try {
+            item.setParent(this);
             children.add(item);
         } finally {
             lock.writeLock().unlock();
@@ -59,5 +61,57 @@ public class Folder implements FileSystemItem {
         } finally {
             lock.writeLock().unlock();
         }
+    }
+
+    @Override
+    public void setParent(Folder parent) {
+        this.parent = parent;
+    }
+
+    @Override
+    public Folder getParent() {
+        return parent;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public String getPath() {
+        return (parent != null ? parent.getPath() : "") + "/" + name;
+    }
+
+    public FileSystemItem resolve(String path) {
+        if (path == null || path.isEmpty() || path.equals(".")) {
+            return this;
+        }
+
+        String[] parts = path.split("/", 2);
+        String currentPart = parts[0];
+        String remainingPart = parts.length > 1 ? parts[1] : "";
+
+        if (currentPart.equals("..")) {
+            return parent != null ? parent.resolve(remainingPart) : null;
+        }
+
+        lock.readLock().lock();
+        try {
+            for (FileSystemItem item : children) {
+                if (item.getName().equals(currentPart)) {
+                    if (remainingPart.isEmpty()) {
+                        return item;
+                    } else if (item instanceof Folder) {
+                        return ((Folder) item).resolve(remainingPart);
+                    } else {
+                        return null; // File cannot have children
+                    }
+                }
+            }
+        } finally {
+            lock.readLock().unlock();
+        }
+        return null; // Not found
     }
 }
